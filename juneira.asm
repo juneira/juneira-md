@@ -132,7 +132,18 @@ Font_NextBit:			;1 color per nibble = 4 bytes
 	move.l d1,(VDP_Data);Write next Long of char (one line) to VDP
 	dbra d6,NextFont	;Loop until done
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;					Set up Logo
+	lea Logo,A1					 ;Logo Address in ROM
+	move.l #544,d6        ;68 tiles 8x8 -> 544 lines of 32 bits
 
+	NextLogoLine:
+	move.l (A1)+,d0		;Get byte from font
+
+	move.l d0,(VDP_Data);Write next Long of char (one line) to VDP
+	dbra d6,NextLogoLine	;Loop until done
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
 
 	clr.b Cursor_X			;Clear Cursor XY
 	clr.b Cursor_Y
@@ -239,6 +250,10 @@ Font_End:
 Background:
 	incbin "1bpp.bin"
 Background_End:
+
+Logo:
+	incbin "4bpp.bin"
+Logo_End:
 
 VDPSettings:
 	DC.B $04 ; 0 mode register 1											---H-1M-
