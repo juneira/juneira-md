@@ -88,15 +88,15 @@ NextInitByte:
 
 	move.l #$C0020000,d0	;Color 1
 	move.l d0,VDP_Ctrl
-	move.w #%0000000011101110,VDP_data
+	move.w #%0000100001101000,VDP_data
 
 	move.l #$C0040000,d0	;Color 2
 	move.l d0,VDP_Ctrl
-	move.w #%0000111011100000,VDP_data
+	move.w #%0000010000000010,VDP_data
 
 	move.l #$C0060000,d0	;Color 3
 	move.l d0,VDP_Ctrl
-	move.w #%0000000000001110,VDP_data
+	move.w #%0000100001010100,VDP_data
 
 	move.l #$C01E0000,d0	;Color 15 (Font)
 	move.l d0,VDP_Ctrl
@@ -133,7 +133,9 @@ Font_NextBit:			;1 color per nibble = 4 bytes
 	dbra d6,NextFont	;Loop until done
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;					Set up Logo
+;					Set up Logo | 0CC0
+	move.l #$4CC00000,(VDP_Ctrl)
+
 	lea Logo,A1					 ;Logo Address in ROM
 	move.l #544,d6        ;68 tiles 8x8 -> 544 lines of 32 bits
 
@@ -150,6 +152,102 @@ Font_NextBit:			;1 color per nibble = 4 bytes
 
 	;Turn on screen
 	move.w	#$8144,(VDP_Ctrl);C00004 reg 1 = 0x44 unblank display
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+
+	Move.L  #$60000003,(VDP_ctrl)
+
+	move.l #4096,d6
+
+ClearPlanB:
+	MOVE.W	#$0,(VDP_data)
+	dbra d6,ClearPlanB
+
+; Logo - Line 1
+	Move.L  #$65140003,(VDP_ctrl)
+	MOVE.W	#%1000000001100111,(VDP_data)
+	MOVE.W	#%1000000001101000,(VDP_data)
+	MOVE.W	#%1000000001101001,(VDP_data)
+	MOVE.W	#%1000000001101010,(VDP_data)
+	MOVE.W	#%1000000001101011,(VDP_data)
+	MOVE.W	#%1000000001101100,(VDP_data)
+	MOVE.W	#%1000000001101101,(VDP_data)
+	MOVE.W	#%1000000001101110,(VDP_data)
+	MOVE.W	#%1000000001101111,(VDP_data)
+	MOVE.W	#%1000000001110000,(VDP_data)
+	MOVE.W	#%1000000001110001,(VDP_data)
+	MOVE.W	#%1000000001110010,(VDP_data)
+	MOVE.W	#%1000000001110011,(VDP_data)
+	MOVE.W	#%1000000001110100,(VDP_data)
+	MOVE.W	#%1000000001110101,(VDP_data)
+	MOVE.W	#%1000000001110110,(VDP_data)
+	MOVE.W	#%1000000001110111,(VDP_data)
+	MOVE.W	#%1000000001111000,(VDP_data)
+	MOVE.W	#%1000000001111001,(VDP_data)
+
+	Move.L  #$65940003,(VDP_ctrl)
+	MOVE.W	#%1000000000000000,(VDP_data)
+	MOVE.W	#%1000000001111010,(VDP_data)
+	MOVE.W	#%1000000001111011,(VDP_data)
+	MOVE.W	#%1000000001111100,(VDP_data)
+	MOVE.W	#%1000000001111101,(VDP_data)
+	MOVE.W	#%1000000001111110,(VDP_data)
+	MOVE.W	#%1000000001111110,(VDP_data)
+	MOVE.W	#%1000000001111111,(VDP_data)
+	MOVE.W	#%1000000010000000,(VDP_data)
+	MOVE.W	#%1000000010000001,(VDP_data)
+	MOVE.W	#%1000000010000010,(VDP_data)
+	MOVE.W	#%1000000010000011,(VDP_data)
+	MOVE.W	#%1000000010000100,(VDP_data)
+	MOVE.W	#%1000000010000101,(VDP_data)
+	MOVE.W	#%1000000010000110,(VDP_data)
+	MOVE.W	#%1000000010000111,(VDP_data)
+	MOVE.W	#%1000000010001000,(VDP_data)
+	MOVE.W	#%1000000010001001,(VDP_data)
+	MOVE.W	#%1000000010001010,(VDP_data)
+
+	Move.L  #$66140003,(VDP_ctrl)
+	MOVE.W	#%1000000010001011,(VDP_data)
+	MOVE.W	#%1000000010001100,(VDP_data)
+	MOVE.W	#%1000000001111011,(VDP_data)
+	MOVE.W	#%1000000010001101,(VDP_data)
+	MOVE.W	#%1000000010001110,(VDP_data)
+	MOVE.W	#%1000000010001111,(VDP_data)
+	MOVE.W	#%1000000001111110,(VDP_data)
+	MOVE.W	#%1000000001111111,(VDP_data)
+	MOVE.W	#%1000000010000000,(VDP_data)
+	MOVE.W	#%1000000010010000,(VDP_data)
+	MOVE.W	#%1000000010010001,(VDP_data)
+	MOVE.W	#%1000000010010010,(VDP_data)
+	MOVE.W	#%1000000010010011,(VDP_data)
+	MOVE.W	#%1000000010010100,(VDP_data)
+	MOVE.W	#%1000000010010101,(VDP_data)
+	MOVE.W	#%1000000010010110,(VDP_data)
+	MOVE.W	#%1000000010010111,(VDP_data)
+	MOVE.W	#%1000000010011000,(VDP_data)
+	MOVE.W	#%1000000010001010,(VDP_data)
+
+	Move.L  #$66940003,(VDP_ctrl)
+	MOVE.W	#%1000000010011001,(VDP_data)
+	MOVE.W	#%1000000010011010,(VDP_data)
+	MOVE.W	#%1000000010011011,(VDP_data)
+	MOVE.W	#%1000000010011100,(VDP_data)
+	MOVE.W	#%1000000010011101,(VDP_data)
+	MOVE.W	#%1000000010011110,(VDP_data)
+	MOVE.W	#%1000000010011111,(VDP_data)
+	MOVE.W	#%1000000010100000,(VDP_data)
+	MOVE.W	#%1000000010100001,(VDP_data)
+	MOVE.W	#%1000000010100010,(VDP_data)
+	MOVE.W	#%1000000010100011,(VDP_data)
+	MOVE.W	#%1000000010100100,(VDP_data)
+	MOVE.W	#%1000000010100010,(VDP_data)
+	MOVE.W	#%1000000010100101,(VDP_data)
+	MOVE.W	#%1000000010100110,(VDP_data)
+	MOVE.W	#%1000000010011111,(VDP_data)
+	MOVE.W	#%1000000010100111,(VDP_data)
+	MOVE.W	#%1000000010101000,(VDP_data)
+	MOVE.W	#%1000000010101001,(VDP_data)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -193,6 +291,7 @@ Message:
 
   dc.b 255
 	even
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -258,8 +357,8 @@ Logo_End:
 VDPSettings:
 	DC.B $04 ; 0 mode register 1											---H-1M-
 	DC.B $04 ; 1 mode register 2											-DVdP---
-	DC.B $30 ; 2 name table base for scroll A (A=top 3 bits)				--AAA--- = $C000
-	DC.B $3C ; 3 name table base for window (A=top 4 bits / 5 in H40 Mode)	--AAAAA- = $F000
+	DC.B $38 ; 2 name table base for scroll A (A=top 3 bits)				--AAA--- = $C000
+	DC.B $34 ; 3 name table base for window (A=top 4 bits / 5 in H40 Mode)	--AAAAA- = $F000
 	DC.B $06 ; 4 name table base for scroll B (A=top 3 bits)				-----AAA = $E000
 	DC.B $6C ; 5 sprite attribute table base (A=top 7 bits / 6 in H40)		-AAAAAAA = $D800
 	DC.B $00 ; 6 unused register											--------
